@@ -1,0 +1,10 @@
+[style]
+based_on_style = yapf
+split_before_first_argument = false
+column_limit = 98
+dedent_closing_brackets = false
+indent_dictionary_value = true
+split_penalty_after_opening_bracket = 0
+coalesce_brackets = false
+split_before_dot = true
+split_complex_comprehension = true
