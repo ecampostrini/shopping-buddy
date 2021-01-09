@@ -33,7 +33,7 @@ items:
   - name: queso parmesano
     quantity: 150 grams
     
-  - hasselnuts
+  - name: hasselnuts
     quantity: 2 bags
 ```
 
