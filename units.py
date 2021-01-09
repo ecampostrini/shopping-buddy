@@ -157,6 +157,16 @@ class Bottle(BaseQuantity):
     self.normalizedQuantity = self.originalQuantity
 
 
+class Box(BaseQuantity):
+  formatRegex = re.compile("([0-9][0-9]*)\s(box(?:es)?)")
+
+  aliases = ["box", "boxes"]
+
+  def __init__(self, qtty, unit="boxes"):
+    self.originalQuantity = Quantity(float(qtty), unit)
+    self.normalizedQuantity = self.originalQuantity
+
+
 availableUnits = [subclass.__name__.lower() for subclass in BaseQuantity.__subclasses__()]
 
 
