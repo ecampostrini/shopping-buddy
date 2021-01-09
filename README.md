@@ -56,3 +56,4 @@ STORES_PATH=stores.yaml SHOPPING_LIST_PATH=shopping_list.yaml python main.py
 ```
 
 5. Check the `board` in Trello, the new card containing the checklist should be there.
+![Example Trello shopping list](https://github.com/ecampostrini/shopping-buddy/blob/main/images/example_list.png)
