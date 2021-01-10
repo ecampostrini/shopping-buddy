@@ -4,7 +4,7 @@ allowing you to create a fresh and easy to read Trello card for every grocery sh
 grocery shop organization.
 
 # Usage
-The minimum required version of Python is `3.7`
+A [Trello](https://trello.com/) account is required and the minimum required version of Python is `3.7`
 1. After cloning the repo install the dependencies: :
 ```bash
 pip3 install -r requirements.txt
@@ -60,6 +60,7 @@ board_name=compras
 # Name of the list within the board where you want the shopping list to be created
 list_name=Por hacer
 ```
+Follow the [API introduction](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/) to get the `API key` and the `server token`
 
 5. Run the script indicating the path to the files that have the definition of the stores and the shopping list created in points `2` and `3`. Assuming these are
 called `stores.yaml` and `shopping_list.yaml` this would look like:
