@@ -4,7 +4,18 @@ allowing you to create a fresh and easy to read Trello card for every grocery sh
 grocery shop organization.
 
 # Usage
-1. Create a `yaml` file containing the `stores` where you get the groceries from:
+The minimum required version of Python is `3.7`
+1. After cloning the repo install the dependencies: :
+```bash
+pip3 install -r requirements.txt
+```
+
+and give execution permission to the script:
+```bash
+chmod +x ./shopping_buddy.py
+```
+
+2. Create a `yaml` file containing the `stores` where you get the groceries from:
 ```yaml
 kind: store
 name: lidl
@@ -23,8 +34,9 @@ items:
     sold_by_the: unit
 
 ```
+You can define more than one store per file by separating them with `---`
 
-2. Create a `yaml` file containing the list of the groceries you need:
+3. Create a `yaml` file containing the list of the groceries you need:
 ```yaml
 kind: shopping_list
 name: compras para la semana
@@ -37,7 +49,7 @@ items:
     quantity: 2 bags
 ```
 
-3. Create a `config.ini` file with the required `Trello` config:
+4. Create a `config.ini` file with the required `Trello` config:
 ```ini
 [TRELLO]
 api_key=<Trello api key>
@@ -49,11 +61,12 @@ board_name=compras
 list_name=Por hacer
 ```
 
-4. Run the script setting the environment variables `STORES_PATH` and `SHOPPING_LIST_PATH` to the files created in points `1` and `2`. Assuming these are
+5. Run the script indicating the path to the files that have the definition of the stores and the shopping list created in points `2` and `3`. Assuming these are
 called `stores.yaml` and `shopping_list.yaml` this would look like:
 ```bash
-STORES_PATH=stores.yaml SHOPPING_LIST_PATH=shopping_list.yaml python main.py
+./shopping_buddy.py --stores stores.yaml --lists shopping_list.yaml
 ```
 
-5. Check the `board` in Trello, the new card containing the checklist should be there.
+6. Check the `board` in Trello, the new card containing the checklist should be there.
+
 ![Example Trello shopping list](https://github.com/ecampostrini/shopping-buddy/blob/main/images/example_list.png)
