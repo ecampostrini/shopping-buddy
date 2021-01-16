@@ -27,7 +27,7 @@ def main():
       "--lists",
       "-l",
       dest="shoppingLists",
-      nargs="+",
+      action="append",
       help="Space separated paths to the target shopping lists",
       required=True)
   args = parser.parse_args()
@@ -36,27 +36,37 @@ def main():
   for storePath in args.stores:
     stores.update(Store.fromFile(storePath))
 
-  # TODO support multiple shopping lists
-  shoppingList = ShoppingList.fromFile(args.shoppingLists[0])
-  # print("{}".format(shoppingList))
-  currenStore = stores[shoppingList.store]
+  # TODO support per-item store
+  for shoppingListPath in args.shoppingLists:
+    shoppingList = ShoppingList.fromFile(shoppingListPath)
+    for itemName, quantity in shoppingList:
+      stores[shoppingList.store].addItem(itemName, quantity)
 
-  for itemName, quantity in shoppingList:
-    currenStore.addItem(itemName, quantity)
+  # shoppingList = ShoppingList.fromFile(args.shoppingLists[0])
+  # # print("{}".format(shoppingList))
+  # currenStore = stores[shoppingList.store]
 
-  print("Shopping list: ")
-  for item, qtty in currenStore:
-    print("{}: {}".format(item, qtty))
+  # for itemName, quantity in shoppingList:
+  # currenStore.addItem(itemName, quantity)
 
-  print("=======")
+  # print("Shopping list: ")
+  # for item, qtty in currenStore:
+  # print("{}: {}".format(item, qtty))
+
+  # print("=======")
 
   trelloClient = TrelloClient()
-  cardId = trelloClient.createCard(currenStore.name)
-  checklistId = trelloClient.createChecklist(cardId, shoppingList.name)
-  trelloClient.addItemsToChecklist(
-      checklistId,
-      ["{}: {}".format(k, v) for k, v in currenStore.getCart().items()],
-  )
+  for storeName, store in stores.items():
+    if not len(store.targetItems):
+      # Don't create cards for stores that have no items
+      continue
+
+    cardId = trelloClient.createCard(storeName)
+    checklistId = trelloClient.createChecklist(cardId, "Cosas a traer")
+    trelloClient.addItemsToChecklist(
+        checklistId,
+        ["{}: {}".format(k, v) for k, v in store.getCart().items()],
+    )
 
 
 if __name__ == "__main__":
