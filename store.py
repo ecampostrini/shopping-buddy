@@ -47,31 +47,37 @@ class Store:
     return next(self.iterator)
 
   def addItem(self, name, quantity):
-    if name in self.targetItems:
-      self.targetItems[name] = self.targetItems[name] + quantity
+    category = self.items[name].category if name in self.items else "unknownCategory"
+
+    if category not in self.targetItems:
+        self.targetItems[category] = {}
+
+    if name in self.targetItems[category]:
+        self.targetItems[category][name] = self.targetItems[category][name] + quantity
     else:
-      self.targetItems[name] = quantity
+        self.targetItems[category][name] = quantity
 
   def getCart(self):
     cart = {}
-    for itemName, quantity in self.targetItems.items():
-      if len(self.items[itemName].availableQuantities):
-        minQuantity, minCombination = optimizeQuantity(quantity,
-                                                       self.items[itemName].availableQuantities)
-        count = defaultdict(int)
-        for quantity in minCombination:
-          count[str(quantity)] += 1
-        cart[itemName] = ", ".join(["{} x {}".format(k, v) for k, v in count.items()])
-      elif len(self.items[itemName].measurementUnit):
-        # TODO enable lookup of class by name of measurement unit and perform this check
-        # properly, i.e.:
-        # if type(quantity).__name__ not in lookupQuantity(self.items[itemName].measurementUnit).aliases:
-        if self.items[itemName].measurementUnit not in type(quantity).aliases:
-          raise RuntimeError("{} quantity must be expressed in {}".format(
-              itemName,
-              type(quantity).__name__))
-        # TODO format quantity
-        cart[itemName] = repr(quantity)
-      else:
-        cart[itemName] = repr(quantity)
+    for categoryName, categoryItems in self.targetItems.items():
+        for itemName, quantity in categoryItems.items():
+          if len(self.items[itemName].availableQuantities):
+            minQuantity, minCombination = optimizeQuantity(quantity,
+                                                           self.items[itemName].availableQuantities)
+            count = defaultdict(int)
+            for quantity in minCombination:
+              count[str(quantity)] += 1
+            cart[itemName] = ", ".join(["{} x {}".format(k, v) for k, v in count.items()])
+          elif len(self.items[itemName].measurementUnit):
+            # TODO enable lookup of class by name of measurement unit and perform this check
+            # properly, i.e.:
+            # if type(quantity).__name__ not in lookupQuantity(self.items[itemName].measurementUnit).aliases:
+            if self.items[itemName].measurementUnit not in type(quantity).aliases:
+              raise RuntimeError("{} quantity must be expressed in {}".format(
+                  itemName,
+                  type(quantity).__name__))
+            # TODO format quantity
+            cart[itemName] = repr(quantity)
+          else:
+            cart[itemName] = repr(quantity)
     return cart
